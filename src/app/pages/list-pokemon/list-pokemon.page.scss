@@ -1,0 +1,87 @@
+ion-toolbar.pokedex-header {
+  --min-height: 74px;
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+  --padding-start: 12px;
+  --padding-end: 14px;
+
+  ion-title {
+    overflow: visible;
+    padding-inline: 4px;
+  }
+}
+
+/* --- Logotipo Pokédex estilo login sin rayo --- */
+.brand-wordmark {
+  display: inline-block;
+  font-size: 2.45rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: #ffffff;
+  -webkit-text-stroke: 2.5px #0d5c63;
+  paint-order: stroke fill;
+  text-shadow:
+    0 3px 0 #06373d,
+    0 0 16px rgba(163, 230, 53, 0.9),
+    0 0 28px rgba(34, 211, 238, 0.65);
+}
+
+/* --- Botón Salir grande con letras blancas y contorno rojo neón --- */
+ion-toolbar ion-buttons ion-button.logout-btn {
+  --color: #ffffff;
+  --border-radius: 999px;
+  height: 52px;
+  min-height: 52px;
+  margin: 0;
+  text-transform: none;
+
+  &::part(native) {
+    background: rgba(255, 23, 68, 0.14);
+    color: #ffffff;
+    border: 2px solid #ff1744;
+    border-radius: 999px;
+    padding: 0 20px;
+    height: 52px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    box-shadow:
+      0 0 12px rgba(255, 23, 68, 0.85),
+      0 0 24px rgba(255, 23, 68, 0.45),
+      inset 0 0 10px rgba(255, 23, 68, 0.35);
+    text-shadow: 0 0 8px rgba(255, 23, 68, 0.9);
+  }
+
+  ion-icon {
+    color: #ffffff;
+    font-size: 1.65rem;
+    margin-right: 8px;
+    filter: drop-shadow(0 0 6px rgba(255, 23, 68, 0.9));
+  }
+}
+
+.border-bottom {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@media (max-width: 400px) {
+  .brand-wordmark {
+    font-size: 2rem;
+  }
+
+  ion-toolbar ion-buttons ion-button.logout-btn {
+    height: 46px;
+    min-height: 46px;
+
+    &::part(native) {
+      height: 46px;
+      padding: 0 14px;
+      font-size: 1.15rem;
+    }
+
+    ion-icon {
+      font-size: 1.45rem;
+    }
+  }
+}

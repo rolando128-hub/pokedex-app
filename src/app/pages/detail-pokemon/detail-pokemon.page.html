@@ -1,0 +1,116 @@
+<ion-content [fullscreen]="true">
+  @if (pokemon(); as p) {
+    <!-- Imagen principal del Pokémon -->
+    <ion-img [src]="p.sprite" />
+
+    <!-- Tarjeta 1: Nombre, Tipo, Peso y Altura -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="ion-text-capitalize">{{ p.name }}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="ion-align-items-center">
+            <ion-col>
+              <ion-text>Tipo</ion-text>
+            </ion-col>
+            <ion-col size="2">
+              <ion-img [src]="'assets/img/' + p.type1 + '.gif'" />
+            </ion-col>
+            @if (p.type2) {
+              <ion-col size="2">
+                <ion-img [src]="'assets/img/' + p.type2 + '.gif'" />
+              </ion-col>
+            }
+          </ion-row>
+
+          <ion-row>
+            <ion-col>
+              <ion-text>Peso</ion-text>
+            </ion-col>
+            <ion-col class="ion-text-end">
+              <ion-text>{{ p.weight }} kg</ion-text>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col>
+              <ion-text>Altura</ion-text>
+            </ion-col>
+            <ion-col class="ion-text-end">
+              <ion-text>{{ p.height }} m</ion-text>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Tarjeta 2: Habilidades -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Habilidades</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-text>Principales</ion-text>
+            </ion-col>
+            <ion-col class="ion-text-end">
+              @for (ability of p.abilities; track ability) {
+                <div>
+                  <ion-text>{{ ability }}</ion-text>
+                </div>
+              }
+            </ion-col>
+          </ion-row>
+
+          @if (p.hiddenAbility) {
+            <ion-row>
+              <ion-col>
+                <ion-text>Oculta</ion-text>
+              </ion-col>
+              <ion-col class="ion-text-end">
+                <ion-text>{{ p.hiddenAbility }}</ion-text>
+              </ion-col>
+            </ion-row>
+          }
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Tarjeta 3: Estadísticas con barras de progreso -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Estadísticas</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-grid>
+          @for (stat of pokemonStats; track stat.name) {
+            <ion-row>
+              <ion-col size="4">
+                <ion-text>{{ stat.display }}</ion-text>
+              </ion-col>
+              <ion-col size="2">
+                <ion-text>{{ p | getStat:stat.name }}</ion-text>
+              </ion-col>
+              <ion-col size="6">
+                <ion-progress-bar [value]="(p | getStat:stat.name) / 255" />
+              </ion-col>
+            </ion-row>
+          }
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- Botón flotante para regresar a la lista -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="goBack()">
+      <ion-icon name="arrow-back" />
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

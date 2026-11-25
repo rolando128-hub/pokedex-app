@@ -1,0 +1,515 @@
+ion-content {
+  --background: radial-gradient(circle at 50% 14%, #1f134f 0%, #0b0f2b 50%, #050714 100%);
+}
+
+.scene-container {
+  position: relative;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow: hidden;
+}
+
+/* --- Destellos en el fondo --- */
+.star {
+  position: absolute;
+  color: #e0f2fe;
+  font-size: 0.95rem;
+  opacity: 0.85;
+  text-shadow: 0 0 10px #38bdf8, 0 0 18px #ffffff;
+  pointer-events: none;
+
+  &.st-1 { top: 8%; left: 32%; }
+  &.st-2 { top: 18%; left: 14%; font-size: 0.8rem; color: #f5d0fe; }
+  &.st-3 { top: 9%; right: 30%; color: #d9f99d; }
+  &.st-4 { top: 22%; right: 14%; font-size: 0.85rem; color: #f472b6; }
+  &.st-5 { bottom: 26%; left: 13%; font-size: 0.85rem; color: #67e8f9; }
+  &.st-6 { bottom: 32%; right: 14%; font-size: 0.85rem; color: #bef264; }
+}
+
+/* --- Pokébolas neón 3D flotantes --- */
+.holo-pokeball {
+  position: absolute;
+  border-radius: 50%;
+  border: 2.5px solid #38bdf8;
+  background: linear-gradient(
+    155deg,
+    rgba(236, 72, 153, 0.78) 0%,
+    rgba(168, 85, 247, 0.55) 47%,
+    #090d26 48%,
+    #090d26 52%,
+    rgba(14, 165, 233, 0.55) 53%,
+    rgba(34, 211, 238, 0.82) 100%
+  );
+  box-shadow:
+    0 0 22px rgba(236, 72, 153, 0.75),
+    0 0 32px rgba(34, 211, 238, 0.55),
+    inset 0 4px 12px rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+  z-index: 1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -1px;
+    right: -1px;
+    height: 4px;
+    transform: translateY(-50%);
+    background: linear-gradient(90deg, #f472b6, #67e8f9);
+    box-shadow: 0 0 10px #22d3ee;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 28%;
+    height: 28%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, #e0f2fe 0%, #0ea5e9 55%, #082f49 100%);
+    border: 2.5px solid #a5f3fc;
+    box-shadow: 0 0 14px #22d3ee;
+  }
+
+  &.ball-tl {
+    width: 78px;
+    height: 78px;
+    top: 3%;
+    left: 2%;
+    transform: rotate(-22deg);
+  }
+
+  &.ball-ml {
+    width: 76px;
+    height: 76px;
+    top: 56%;
+    left: -18px;
+    transform: rotate(18deg);
+  }
+
+  &.ball-br {
+    width: 118px;
+    height: 118px;
+    bottom: 2%;
+    right: -14px;
+    transform: rotate(-24deg);
+  }
+}
+
+/* --- Sprites de 136px y bloque con nombre --- */
+.api-sprite {
+  width: 136px;
+  height: 136px;
+  image-rendering: pixelated;
+  pointer-events: none;
+  user-select: none;
+}
+
+.stage-poke-unit {
+  position: absolute;
+  z-index: 2;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.poke-name-tag {
+  margin-top: -16px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(7, 11, 29, 0.86);
+  border: 1px solid rgba(56, 189, 248, 0.55);
+  color: #f8fafc;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.8);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.65);
+  white-space: nowrap;
+
+  &.top-tag {
+    position: relative;
+    z-index: 2;
+    margin-top: 0;
+    margin-bottom: -18px;
+  }
+}
+
+/* Brillos neón y color de etiqueta por Pokémon */
+.glow-cyan {
+  &.api-sprite,
+  .api-sprite {
+    filter:
+      drop-shadow(0 0 9px rgba(34, 211, 238, 0.9))
+      drop-shadow(0 0 18px rgba(56, 189, 248, 0.6));
+  }
+
+  .poke-name-tag {
+    border-color: rgba(34, 211, 238, 0.7);
+    color: #cffafe;
+  }
+}
+
+.glow-pink {
+  &.api-sprite,
+  .api-sprite {
+    filter:
+      drop-shadow(0 0 9px rgba(244, 114, 182, 0.9))
+      drop-shadow(0 0 18px rgba(236, 72, 153, 0.6));
+  }
+
+  .poke-name-tag {
+    border-color: rgba(244, 114, 182, 0.7);
+    color: #fce7f3;
+    text-shadow: 0 0 8px rgba(236, 72, 153, 0.8);
+  }
+}
+
+.glow-lime {
+  &.api-sprite,
+  .api-sprite {
+    filter:
+      drop-shadow(0 0 9px rgba(163, 230, 53, 0.9))
+      drop-shadow(0 0 18px rgba(132, 204, 22, 0.6));
+  }
+
+  .poke-name-tag {
+    border-color: rgba(163, 230, 53, 0.75);
+    color: #ecfccb;
+    text-shadow: 0 0 8px rgba(132, 204, 22, 0.85);
+  }
+}
+
+.glow-purple {
+  &.api-sprite,
+  .api-sprite {
+    filter:
+      drop-shadow(0 0 9px rgba(168, 85, 247, 0.95))
+      drop-shadow(0 0 18px rgba(192, 132, 252, 0.65));
+  }
+
+  .poke-name-tag {
+    border-color: rgba(192, 132, 252, 0.75);
+    color: #f3e8ff;
+    text-shadow: 0 0 8px rgba(168, 85, 247, 0.85);
+  }
+}
+
+/* --- Horizonte de recuadros urbanos neón --- */
+.cyber-city {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 46%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 2px;
+  opacity: 0.65;
+  pointer-events: none;
+
+  .tower {
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 10px,
+        rgba(56, 189, 248, 0.14) 10px,
+        rgba(56, 189, 248, 0.14) 12px
+      ),
+      linear-gradient(180deg, rgba(22, 30, 74, 0.96) 0%, rgba(5, 8, 22, 1) 100%);
+    border-top: 2px solid #22d3ee;
+    border-left: 1.5px solid rgba(236, 72, 153, 0.42);
+    border-right: 1.5px solid rgba(34, 211, 238, 0.42);
+  }
+
+  .t1 { width: 13%; height: 66%; }
+  .t2 { width: 16%; height: 84%; border-top-color: #f472b6; }
+  .t3 { width: 13%; height: 56%; }
+  .t4 { width: 18%; height: 92%; border-top-color: #a3e635; }
+  .t5 { width: 15%; height: 76%; border-top-color: #f472b6; }
+  .t6 { width: 12%; height: 60%; }
+  .t7 { width: 11%; height: 70%; border-top-color: #22d3ee; }
+}
+
+/* --- Columna central --- */
+.center-stack {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  max-width: 430px;
+}
+
+/* --- Encabezado más grande con contorno verde azulado y brillo neón --- */
+.brand-hero {
+  text-align: center;
+  margin-bottom: 8px;
+
+  .brand-wordmark {
+    margin: 0;
+    font-size: clamp(3.5rem, 6vw, 4.6rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -1.5px;
+    color: #ffffff;
+    -webkit-text-stroke: 3.5px #0d5c63;
+    paint-order: stroke fill;
+    text-shadow:
+      0 5px 0 #06373d,
+      0 0 22px rgba(163, 230, 53, 0.9),
+      0 0 36px rgba(34, 211, 238, 0.65);
+  }
+
+  .brand-tagline {
+    margin: 10px 0 0;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
+  }
+}
+
+/* --- Fila de 4 Pokémon posados sobre el borde superior con su nombre ARRIBA --- */
+.ledge-sprites {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 148px;
+  margin-bottom: -34px;
+  pointer-events: none;
+
+  .ledge-poke-unit {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 -16px;
+  }
+
+  .ledge-edge {
+    transform: translateY(6px);
+  }
+}
+
+/* --- Recuadro principal biselado con borde neón --- */
+.chamfer-border-frame {
+  position: relative;
+  z-index: 2;
+  padding: 1.5px;
+  background: linear-gradient(145deg, #22d3ee 0%, #38bdf8 48%, #a3e635 100%);
+  clip-path: polygon(
+    22px 0%,
+    calc(100% - 22px) 0%,
+    100% 22px,
+    100% calc(100% - 22px),
+    calc(100% - 22px) 100%,
+    22px 100%,
+    0% calc(100% - 22px),
+    0% 22px
+  );
+  filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.85));
+}
+
+.chamfer-card {
+  margin: 0;
+  border-radius: 0;
+  background: rgba(10, 14, 36, 0.9);
+  clip-path: polygon(
+    21px 0%,
+    calc(100% - 21px) 0%,
+    100% 21px,
+    100% calc(100% - 21px),
+    calc(100% - 21px) 100%,
+    21px 100%,
+    0% calc(100% - 21px),
+    0% 21px
+  );
+  backdrop-filter: blur(12px);
+
+  ion-card-content {
+    padding: 36px 20px 24px;
+  }
+}
+
+/* --- Recuadros de entrada tipo píldora (cian y verde lima) --- */
+.input-wrapper {
+  margin-bottom: 16px;
+}
+
+.cyber-pill {
+  --background: rgba(14, 20, 48, 0.92);
+  --color: #ffffff;
+  --placeholder-color: #e2e8f0;
+  --placeholder-opacity: 0.92;
+  --padding-start: 18px;
+  --padding-end: 18px;
+  --min-height: 50px;
+  border-radius: 999px;
+  transition: box-shadow 0.2s ease;
+
+  ion-icon {
+    font-size: 1.25rem;
+    margin-right: 12px;
+  }
+}
+
+.pill-cyan {
+  border: 1.5px solid #38bdf8;
+  box-shadow:
+    0 0 12px rgba(56, 189, 248, 0.4),
+    inset 0 0 8px rgba(56, 189, 248, 0.18);
+
+  ion-icon {
+    color: #7dd3fc;
+  }
+
+  &:focus-within {
+    box-shadow:
+      0 0 18px rgba(56, 189, 248, 0.8),
+      inset 0 0 10px rgba(56, 189, 248, 0.28);
+  }
+}
+
+.pill-lime {
+  border: 1.5px solid #a3e635;
+  box-shadow:
+    0 0 12px rgba(163, 230, 53, 0.4),
+    inset 0 0 8px rgba(163, 230, 53, 0.18);
+
+  ion-icon {
+    color: #bef264;
+  }
+
+  &:focus-within {
+    box-shadow:
+      0 0 18px rgba(163, 230, 53, 0.8),
+      inset 0 0 10px rgba(163, 230, 53, 0.28);
+  }
+}
+
+.error-hint {
+  display: block;
+  margin-top: 5px;
+  padding-left: 18px;
+}
+
+/* --- Checkbox Recordar sesión --- */
+.remember-check {
+  margin: 2px 0 8px;
+  padding-left: 12px;
+
+  ion-checkbox {
+    --size: 18px;
+    --checkbox-background-checked: #84cc16;
+    --border-color-checked: #84cc16;
+    --border-color: #38bdf8;
+    --checkmark-color: #052e16;
+    color: #e2e8f0;
+    font-size: 0.86rem;
+  }
+}
+
+/* --- Alerta de error --- */
+.auth-error-box {
+  background: rgba(244, 63, 94, 0.2);
+  border: 1px solid rgba(251, 113, 133, 0.6);
+  border-radius: 999px;
+  padding: 9px 14px;
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 0.84rem;
+}
+
+/* --- Contenedor del botón Conectar + Pikachu sin nombre posado arriba --- */
+.connect-btn-wrapper {
+  position: relative;
+  margin-top: 38px;
+}
+
+.pikachu-on-button {
+  position: absolute;
+  top: -76px;
+  right: 12px;
+  width: 112px;
+  height: 112px;
+  z-index: 10;
+}
+
+/* --- Botón Conectar en verde lima neón --- */
+.btn-connect-neon {
+  --background: linear-gradient(90deg, #84cc16 0%, #a3e635 50%, #4ade80 100%);
+  --background-hover: linear-gradient(90deg, #a3e635 0%, #bef264 50%, #86efac 100%);
+  --background-activated: #65a30d;
+  --color: #052e16;
+  --border-radius: 999px;
+  --box-shadow: 0 0 24px rgba(163, 230, 53, 0.75);
+  height: 50px;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.3px;
+  text-transform: none;
+  margin: 0;
+}
+
+/* --- Enlace inferior Crear cuenta nueva --- */
+.create-account-link {
+  margin-top: 18px;
+  text-align: center;
+
+  a {
+    color: #f7fee7;
+    font-size: 0.94rem;
+    font-weight: 700;
+    text-decoration: none;
+    text-shadow: 0 0 12px rgba(163, 230, 53, 0.7);
+
+    &:hover {
+      color: #bef264;
+      text-decoration: underline;
+    }
+  }
+}
+
+/* --- Escala responsiva conservando todos los Pokémon --- */
+@media (max-width: 640px) {
+  .api-sprite {
+    width: 92px;
+    height: 92px;
+  }
+
+  .poke-name-tag {
+    margin-top: -12px;
+    font-size: 0.64rem;
+    padding: 1px 7px;
+
+    &.top-tag {
+      margin-top: 0;
+      margin-bottom: -14px;
+    }
+  }
+
+  .ledge-sprites {
+    min-height: 106px;
+    margin-bottom: -24px;
+
+    .ledge-poke-unit {
+      margin: 0 -10px;
+    }
+  }
+
+  .pikachu-on-button {
+    top: -64px;
+    right: 8px;
+    width: 92px;
+    height: 92px;
+  }
+}

@@ -1,0 +1,246 @@
+<ion-content [fullscreen]="true">
+  <div class="scene-container">
+    <!-- Destellos en el fondo -->
+    <span class="star st-1">✦</span>
+    <span class="star st-2">✧</span>
+    <span class="star st-3">✦</span>
+    <span class="star st-4">✧</span>
+    <span class="star st-5">✦</span>
+    <span class="star st-6">✧</span>
+
+    <!-- Pokébolas neón flotantes -->
+    <div class="holo-pokeball ball-tl" aria-hidden="true"></div>
+    <div class="holo-pokeball ball-ml" aria-hidden="true"></div>
+    <div class="holo-pokeball ball-br" aria-hidden="true"></div>
+
+    <!-- Horizonte urbano neón de fondo -->
+    <div class="cyber-city" aria-hidden="true">
+      <div class="tower t1"></div>
+      <div class="tower t2"></div>
+      <div class="tower t3"></div>
+      <div class="tower t4"></div>
+      <div class="tower t5"></div>
+      <div class="tower t6"></div>
+      <div class="tower t7"></div>
+    </div>
+
+    <!-- 14 Pokémon esparcidos aleatoriamente con su nombre debajo -->
+    @for (item of stagePokemons(); track item.pokemon.id) {
+      @if (item.pokemon.sprite) {
+        <div
+          class="stage-poke-unit {{ item.glowClass }}"
+          [style.top]="item.top"
+          [style.left]="item.left"
+          [style.transform]="item.rotation"
+        >
+          <img
+            [src]="item.pokemon.sprite"
+            [alt]="item.pokemon.name"
+            class="api-sprite"
+          />
+          <span class="poke-name-tag">{{ item.pokemon.name }}</span>
+        </div>
+      }
+    }
+
+    <div class="center-stack">
+      <!-- Encabezado principal -->
+      <div class="brand-hero">
+        <h1 class="brand-wordmark">Crear Cuenta</h1>
+        <p class="brand-tagline">
+          Únete a la red global de investigación y entrenadores.
+        </p>
+      </div>
+
+      <!-- 4 Pokémon posados encima del borde superior con el nombre ARRIBA -->
+      <div class="ledge-sprites">
+        @for (item of ledgePokemons(); track item.pokemon.id) {
+          @if (item.pokemon.sprite) {
+            <div class="ledge-poke-unit {{ item.slotClass }} {{ item.glowClass }}">
+              <span class="poke-name-tag top-tag">{{ item.pokemon.name }}</span>
+              <img
+                [src]="item.pokemon.sprite"
+                [alt]="item.pokemon.name"
+                class="api-sprite"
+              />
+            </div>
+          }
+        }
+      </div>
+
+      <!-- Marco biselado con borde degradado cian y verde lima -->
+      <div class="chamfer-border-frame">
+        <ion-card class="chamfer-card">
+          <ion-card-content>
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+              <!-- 1. Campo Usuario -->
+              <div class="input-wrapper">
+                <div class="field-label-row">
+                  <label class="field-label">USUARIO</label>
+                </div>
+                <ion-item lines="none" class="cyber-pill pill-cyan">
+                  <ion-icon name="person-outline" slot="start" />
+                  <ion-input
+                    type="text"
+                    placeholder="ej. Red_Oak_99"
+                    formControlName="username"
+                  />
+                </ion-item>
+                @if (registerForm.controls.username.touched && registerForm.controls.username.invalid) {
+                  <ion-text color="danger" class="error-hint">
+                    @if (registerForm.controls.username.hasError('required')) {
+                      <small>El usuario es obligatorio.</small>
+                    } @else if (registerForm.controls.username.hasError('minlength')) {
+                      <small>Debe tener al menos 3 caracteres.</small>
+                    }
+                  </ion-text>
+                }
+              </div>
+
+              <!-- 2. Campo Correo Electrónico -->
+              <div class="input-wrapper">
+                <div class="field-label-row">
+                  <label class="field-label">CORREO ELECTRÓNICO</label>
+                </div>
+                <ion-item lines="none" class="cyber-pill pill-pink">
+                  <ion-icon name="mail-outline" slot="start" />
+                  <ion-input
+                    type="email"
+                    placeholder="investigador@silph.co"
+                    formControlName="email"
+                  />
+                </ion-item>
+                @if (registerForm.controls.email.touched && registerForm.controls.email.invalid) {
+                  <ion-text color="danger" class="error-hint">
+                    @if (registerForm.controls.email.hasError('required')) {
+                      <small>El correo electrónico es obligatorio.</small>
+                    } @else if (registerForm.controls.email.hasError('email')) {
+                      <small>Ingresa un correo electrónico válido.</small>
+                    }
+                  </ion-text>
+                }
+              </div>
+
+              <!-- 3. Campo Contraseña con indicador de Seguridad y botón de ojo -->
+              <div class="input-wrapper">
+                <div class="field-label-row">
+                  <label class="field-label">CONTRASEÑA</label>
+                  <span class="security-badge {{ passwordStrength().cssClass }}">
+                    {{ passwordStrength().label }}
+                  </span>
+                </div>
+                <ion-item lines="none" class="cyber-pill pill-lime">
+                  <ion-icon name="lock-closed-outline" slot="start" />
+                  <ion-input
+                    [type]="showPassword() ? 'text' : 'password'"
+                    placeholder="••••••••"
+                    formControlName="password"
+                    (ionInput)="onPasswordInput($event)"
+                  />
+                  <ion-button
+                    type="button"
+                    fill="clear"
+                    slot="end"
+                    class="eye-toggle-btn"
+                    (click)="togglePasswordVisibility()"
+                    aria-label="Mostrar u ocultar contraseña"
+                  >
+                    <ion-icon
+                      [name]="showPassword() ? 'eye-off-outline' : 'eye-outline'"
+                    />
+                  </ion-button>
+                </ion-item>
+                @if (registerForm.controls.password.touched && registerForm.controls.password.invalid) {
+                  <ion-text color="danger" class="error-hint">
+                    @if (registerForm.controls.password.hasError('required')) {
+                      <small>La contraseña es obligatoria.</small>
+                    } @else if (registerForm.controls.password.hasError('minlength')) {
+                      <small>Mínimo 6 caracteres.</small>
+                    }
+                  </ion-text>
+                }
+              </div>
+
+              <!-- 4. Campo Confirmar Contraseña -->
+              <div class="input-wrapper">
+                <div class="field-label-row">
+                  <label class="field-label">CONFIRMAR CONTRASEÑA</label>
+                </div>
+                <ion-item lines="none" class="cyber-pill pill-cyan">
+                  <ion-icon name="shield-checkmark-outline" slot="start" />
+                  <ion-input
+                    [type]="showConfirmPassword() ? 'text' : 'password'"
+                    placeholder="••••••••"
+                    formControlName="confirmPassword"
+                  />
+                  <ion-button
+                    type="button"
+                    fill="clear"
+                    slot="end"
+                    class="eye-toggle-btn"
+                    (click)="toggleConfirmPasswordVisibility()"
+                    aria-label="Mostrar u ocultar confirmación de contraseña"
+                  >
+                    <ion-icon
+                      [name]="showConfirmPassword() ? 'eye-off-outline' : 'eye-outline'"
+                    />
+                  </ion-button>
+                </ion-item>
+                @if (registerForm.controls.confirmPassword.touched && registerForm.controls.confirmPassword.invalid) {
+                  <ion-text color="danger" class="error-hint">
+                    <small>Debes confirmar tu contraseña.</small>
+                  </ion-text>
+                } @else if (registerForm.controls.confirmPassword.touched && registerForm.hasError('passwordMismatch')) {
+                  <ion-text color="danger" class="error-hint">
+                    <small>Las contraseñas no coinciden.</small>
+                  </ion-text>
+                }
+              </div>
+
+              <!-- Checkbox Acepto los Términos de Servicio -->
+              <div class="terms-check">
+                <ion-checkbox formControlName="acceptTerms" labelPlacement="end">
+                  Acepto los Términos de Servicio y la Investigación
+                </ion-checkbox>
+                @if (registerForm.controls.acceptTerms.touched && registerForm.controls.acceptTerms.invalid) {
+                  <ion-text color="danger" class="error-hint terms-error">
+                    <small>Debes aceptar los términos para continuar.</small>
+                  </ion-text>
+                }
+              </div>
+
+              <!-- Mensaje de error de servidor -->
+              @if (errorMessage()) {
+                <div class="auth-error-box">
+                  <ion-text color="danger">{{ errorMessage() }}</ion-text>
+                </div>
+              }
+
+              <!-- Botón principal con Eevee posado arriba -->
+              <div class="connect-btn-wrapper">
+                @if (buttonPokemon(); as eevee) {
+                  @if (eevee.sprite) {
+                    <img
+                      [src]="eevee.sprite"
+                      [alt]="eevee.name"
+                      class="api-sprite eevee-on-button glow-cyan"
+                    />
+                  }
+                }
+
+                <ion-button expand="block" type="submit" class="btn-connect-neon">
+                  Crear cuenta de entrenador
+                </ion-button>
+              </div>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- Enlace inferior para regresar al Login -->
+      <div class="login-link">
+        <a routerLink="/login">¿Ya tienes cuenta? Inicia sesión</a>
+      </div>
+    </div>
+  </div>
+</ion-content>

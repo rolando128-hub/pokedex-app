@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar color="dark" class="pokedex-header">
+    <ion-title>
+      <div class="brand-wordmark">Pokédex</div>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button class="logout-btn" (click)="onLogout()">
+        <ion-icon name="log-out-outline" slot="start" />
+        Salir
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    @for (pokemon of pokemons(); track pokemon.id) {
+    <ion-row
+      class="ion-align-items-center border-bottom"
+      (click)="goToDetail(pokemon)"
+    >
+      <ion-col size="3">
+        @if (pokemon.sprite) {
+        <ion-img [src]="pokemon.sprite" />
+        }
+      </ion-col>
+      <ion-col>
+        <ion-text class="ion-text-capitalize">{{ pokemon.name }}</ion-text>
+      </ion-col>
+      <ion-col size="2">
+        <ion-img [src]="'assets/img/' + pokemon.type1 + '.gif'" />
+      </ion-col>
+      <ion-col size="2">
+        @if (pokemon.type2) {
+        <ion-img [src]="'assets/img/' + pokemon.type2 + '.gif'" />
+        }
+      </ion-col>
+    </ion-row>
+    }
+  </ion-grid>
+
+  <ion-infinite-scroll threshold="50px" (ionInfinite)="morePokemon($event)">
+    <ion-infinite-scroll-content
+      loadingText="Cargando..."
+      loadingSpinner="bubbles"
+    />
+  </ion-infinite-scroll>
+</ion-content>
