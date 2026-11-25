@@ -1,149 +1,90 @@
 <ion-content [fullscreen]="true">
-  <div class="scene-container">
-    <!-- Destellos en el fondo -->
-    <span class="star st-1">✦</span>
-    <span class="star st-2">✧</span>
-    <span class="star st-3">✦</span>
-    <span class="star st-4">✧</span>
-    <span class="star st-5">✦</span>
-    <span class="star st-6">✧</span>
+  <div class="login-wrapper">
+    <!-- Encabezado superior estilo Pokédex Pro -->
+    <div class="brand-header">
+      <div class="access-badge">
+        <span class="badge-dot"></span>
+        TERMINAL DE ACCESO
+      </div>
 
-    <!-- Pokébolas neón flotantes -->
-    <div class="holo-pokeball ball-tl" aria-hidden="true"></div>
-    <div class="holo-pokeball ball-ml" aria-hidden="true"></div>
-    <div class="holo-pokeball ball-br" aria-hidden="true"></div>
+      <div class="pokeball-emblem">
+        <div class="pokeball-line"></div>
+        <div class="pokeball-center"></div>
+      </div>
 
-    <!-- Horizonte urbano neón de fondo -->
-    <div class="cyber-city" aria-hidden="true">
-      <div class="tower t1"></div>
-      <div class="tower t2"></div>
-      <div class="tower t3"></div>
-      <div class="tower t4"></div>
-      <div class="tower t5"></div>
-      <div class="tower t6"></div>
-      <div class="tower t7"></div>
+      <h1 class="brand-title">Pokédex <span>Pro</span></h1>
+      <p class="brand-subtitle">
+        Conecta tu sesión y explora todos los registros disponibles
+      </p>
     </div>
 
-    <!-- 14 Pokémon esparcidos aleatoriamente con su nombre debajo -->
-    @for (item of stagePokemons(); track item.pokemon.id) {
-      @if (item.pokemon.sprite) {
-        <div
-          class="stage-poke-unit {{ item.glowClass }}"
-          [style.top]="item.top"
-          [style.left]="item.left"
-          [style.transform]="item.rotation"
-        >
-          <img
-            [src]="item.pokemon.sprite"
-            [alt]="item.pokemon.name"
-            class="api-sprite"
-          />
-          <span class="poke-name-tag">{{ item.pokemon.name }}</span>
-        </div>
-      }
-    }
-
-    <div class="center-stack">
-      <!-- Encabezado principal ampliado -->
-      <div class="brand-hero">
-        <h1 class="brand-wordmark">Pokédex</h1>
-        <p class="brand-tagline">Entrena y captura tus compañeros</p>
-      </div>
-
-      <!-- 4 Pokémon posados encima del borde superior con el nombre ARRIBA -->
-      <div class="ledge-sprites">
-        @for (item of ledgePokemons(); track item.pokemon.id) {
-          @if (item.pokemon.sprite) {
-            <div class="ledge-poke-unit {{ item.slotClass }} {{ item.glowClass }}">
-              <span class="poke-name-tag top-tag">{{ item.pokemon.name }}</span>
-              <img
-                [src]="item.pokemon.sprite"
-                [alt]="item.pokemon.name"
-                class="api-sprite"
+    <!-- Tarjeta principal del formulario -->
+    <ion-card class="login-card">
+      <ion-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <!-- Campo Usuario -->
+          <div class="field-group">
+            <label class="field-label">USUARIO</label>
+            <ion-item lines="none" class="custom-input">
+              <ion-icon name="person-outline" slot="start" />
+              <ion-input
+                type="text"
+                placeholder="Ingresa tu usuario"
+                formControlName="username"
               />
+            </ion-item>
+            @if (loginForm.controls.username.touched && loginForm.controls.username.invalid) {
+              <ion-text color="danger" class="field-error">
+                <small>El usuario es obligatorio.</small>
+              </ion-text>
+            }
+          </div>
+
+          <!-- Campo Contraseña -->
+          <div class="field-group">
+            <label class="field-label">CONTRASEÑA</label>
+            <ion-item lines="none" class="custom-input">
+              <ion-icon name="lock-closed-outline" slot="start" />
+              <ion-input
+                type="password"
+                placeholder="••••••••"
+                formControlName="password"
+              />
+            </ion-item>
+            @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) {
+              <ion-text color="danger" class="field-error">
+                <small>La contraseña es obligatoria.</small>
+              </ion-text>
+            }
+          </div>
+
+          <!-- Casilla Recordar sesión -->
+          <div class="remember-row">
+            <ion-checkbox formControlName="remember" labelPlacement="end">
+              Recordar sesión
+            </ion-checkbox>
+          </div>
+
+          <!-- Mensaje de error de autenticación -->
+          @if (errorMessage()) {
+            <div class="error-banner">
+              <ion-text color="danger">{{ errorMessage() }}</ion-text>
             </div>
           }
-        }
-      </div>
 
-      <!-- Marco biselado con borde degradado cian y verde lima -->
-      <div class="chamfer-border-frame">
-        <ion-card class="chamfer-card">
-          <ion-card-content>
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-              <!-- Campo Usuario (recuadro redondeado cian) -->
-              <div class="input-wrapper">
-                <ion-item lines="none" class="cyber-pill pill-cyan">
-                  <ion-icon name="person-outline" slot="start" />
-                  <ion-input
-                    type="text"
-                    placeholder="Usuario"
-                    formControlName="username"
-                  />
-                </ion-item>
-                @if (loginForm.controls.username.touched && loginForm.controls.username.invalid) {
-                  <ion-text color="danger" class="error-hint">
-                    <small>El usuario es obligatorio.</small>
-                  </ion-text>
-                }
-              </div>
+          <!-- Botón principal en turquesa -->
+          <ion-button expand="block" type="submit" class="btn-turquoise">
+            Iniciar sesión
+            <ion-icon name="log-in-outline" slot="end" />
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
 
-              <!-- Campo Contraseña (recuadro redondeado verde lima) -->
-              <div class="input-wrapper">
-                <ion-item lines="none" class="cyber-pill pill-lime">
-                  <ion-icon name="lock-closed-outline" slot="start" />
-                  <ion-input
-                    type="password"
-                    placeholder="Contraseña"
-                    formControlName="password"
-                  />
-                </ion-item>
-                @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) {
-                  <ion-text color="danger" class="error-hint">
-                    <small>La contraseña es obligatoria.</small>
-                  </ion-text>
-                }
-              </div>
-
-              <!-- Checkbox Recordar sesión -->
-              <div class="remember-check">
-                <ion-checkbox formControlName="remember" labelPlacement="end">
-                  Recordar sesión
-                </ion-checkbox>
-              </div>
-
-              <!-- Mensaje de error de autenticación -->
-              @if (errorMessage()) {
-                <div class="auth-error-box">
-                  <ion-text color="danger">{{ errorMessage() }}</ion-text>
-                </div>
-              }
-
-              <!-- Botón Conectar con Pikachu posado arriba (sin nombre) -->
-              <div class="connect-btn-wrapper">
-                @if (buttonPokemon(); as pikachu) {
-                  @if (pikachu.sprite) {
-                    <img
-                      [src]="pikachu.sprite"
-                      [alt]="pikachu.name"
-                      class="api-sprite pikachu-on-button glow-lime"
-                    />
-                  }
-                }
-
-                <ion-button expand="block" type="submit" class="btn-connect-neon">
-                  Conectar
-                </ion-button>
-              </div>
-            </form>
-          </ion-card-content>
-        </ion-card>
-      </div>
-
-      <!-- Enlace inferior Crear cuenta nueva -->
-      <div class="create-account-link">
-        <a routerLink="/registro">Crear cuenta nueva</a>
-      </div>
+    <!-- Enlace inferior hacia Registro -->
+    <div class="register-footer">
+      <span>¿No tienes cuenta?</span>
+      <a routerLink="/registro">Regístrate aquí</a>
     </div>
   </div>
 </ion-content>
