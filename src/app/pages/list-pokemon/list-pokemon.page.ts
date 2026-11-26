@@ -76,9 +76,7 @@ export class ListPokemonPage implements OnInit {
   }
 
   goToDetail(pokemon: IPokemon) {
-    this.router.navigate(['/detail-pokemon'], {
-      state: { pokemon },
-    });
+    this.router.navigate(['/detail-pokemon', pokemon.id]);
   }
 
   async onLogout() {
